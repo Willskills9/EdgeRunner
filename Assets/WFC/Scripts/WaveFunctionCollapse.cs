@@ -43,7 +43,7 @@ public class WaveFunctionCollapse : MonoBehaviour
         tempGrid.Sort((a, b) => a.tileOptions.Length - b.tileOptions.Length);
         tempGrid.RemoveAll(a => a.tileOptions.Length != tempGrid[0].tileOptions.Length);
 
-        yield return new WaitForSeconds(0.025f);
+        yield return new WaitForSeconds(0.001f);
 
         CollapseCell(tempGrid);
     }

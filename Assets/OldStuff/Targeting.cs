@@ -90,7 +90,7 @@ public class Targeting : MonoBehaviour
             yield return null;
         }
 
-        rb.MovePosition(targetPosition);
+        //rb.MovePosition(targetPosition);
 
         isDashing = false;
     }
