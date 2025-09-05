@@ -11,12 +11,13 @@ public class Targeting : MonoBehaviour
     public float rateOfFire;
     public float dashSpeed = 1000f;
     public float dashDuration = 0.2f;
-    //public Rigidbody rb;
+    public Rigidbody rb;
     public float dashCooldown = 2f;    // Cooldown between dashes
 
     private bool canDash = true;
     private bool isDashing = false;
-    public bool dashPrimed;
+    public bool dashPrimed = false;
+    public bool gravityOff = false;
     bool inputShooting;
     bool inputDashing;
     private float dashTimer = 0f;
@@ -24,6 +25,7 @@ public class Targeting : MonoBehaviour
     void Start()
     {
         Cursor.lockState = CursorLockMode.Locked;
+        rb = transform.root.GetComponent<Rigidbody>();
     }
 
     void Update()
@@ -46,7 +48,29 @@ public class Targeting : MonoBehaviour
         // Dash input
         if (inputDashing && canDash && selectedObject != null)
         {
+            dashPrimed = true;
+        }
+
+        if (dashPrimed && !inputDashing && canDash && selectedObject != null)
+        {
+            dashPrimed = false;
             StartCoroutine(DashTowardsTarget());
+        }
+
+        if (dashPrimed)
+        {
+            Time.timeScale = 0.1f;
+        }else
+        {
+            Time.timeScale = 1f;
+        }
+
+        if(gravityOff)
+        {
+            rb.useGravity = false;
+        }else
+        {
+            rb.useGravity = true;
         }
 
         // Cooldown timer update
@@ -55,6 +79,7 @@ public class Targeting : MonoBehaviour
             dashTimer -= Time.deltaTime;
             if (dashTimer <= 0f)
             {
+                gravityOff = false;
                 canDash = true;
             }
         }
@@ -67,7 +92,10 @@ public class Targeting : MonoBehaviour
         Debug.Log("Dashed");
         isDashing = true;
 
-        Rigidbody rb = transform.root.GetComponent<Rigidbody>();
+        yield return new WaitForSeconds(0.1f);
+        
+
+        
         if (rb == null)
         {
             Debug.LogError("No Rigidbody found on player root!");
@@ -91,7 +119,7 @@ public class Targeting : MonoBehaviour
         }
 
         //rb.MovePosition(targetPosition);
-
+        gravityOff = true;
         isDashing = false;
     }
 

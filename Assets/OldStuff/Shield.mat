@@ -61,13 +61,13 @@ Material:
     - _EnableExternalAlpha: 0
     - _QueueControl: 0
     - _QueueOffset: 0
-    - lineFrequency: 0.65
-    - line_brighness: 1.5
-    - power: 1.59
-    - speed: 0.7
+    - lineFrequency: 12.18
+    - line_brighness: 4.93
+    - power: 1.42
+    - speed: 2.7
     m_Colors:
-    - ScanLineTiling: {r: 0, g: 42.01, b: 0, a: 0}
-    - _Color: {r: 1, g: 0, b: 0, a: 1}
+    - ScanLineTiling: {r: 0, g: 30.16, b: 0, a: 0}
+    - _Color: {r: 5.9921575, g: 0, b: 0, a: 1}
     - _Flip: {r: 1, g: 1, b: 1, a: 1}
     - _RendererColor: {r: 1, g: 1, b: 1, a: 1}
   m_BuildTextureStacks: []
