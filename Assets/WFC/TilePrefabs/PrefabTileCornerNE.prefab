@@ -117,9 +117,9 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 9152671164547352165}
-  - component: {fileID: 1931167099410598695}
+  - component: {fileID: -6384470222588187204}
   m_Layer: 0
-  m_Name: PrefabTileEdge
+  m_Name: PrefabTileCornerNE
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -142,7 +142,7 @@ Transform:
   - {fileID: 5494751145927353628}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &1931167099410598695
+--- !u!114 &-6384470222588187204
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -155,25 +155,15 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   upNeighbours:
-  - {fileID: 1931167099410598695}
-  - {fileID: 1931167099410598695}
-  - {fileID: -6454159676200693056, guid: 5383ce247d66a3f47a76284f25a41fe4, type: 3}
   - {fileID: -6384470222588187204, guid: b40230bf8ae075947beff15417e4d623, type: 3}
+  - {fileID: -6384470222588187204, guid: 7595ff16c259fa84998a8315545940a4, type: 3}
   rightNeighbours:
-  - {fileID: 1931167099410598695}
-  - {fileID: 1931167099410598695}
-  - {fileID: -6454159676200693056, guid: 5383ce247d66a3f47a76284f25a41fe4, type: 3}
   - {fileID: -6384470222588187204, guid: fd3bbdbddfaf9304383ab191fc83bb2f, type: 3}
+  - {fileID: -6384470222588187204, guid: 39d698d792e28ed40b32f47746ada408, type: 3}
   downNeighbours:
-  - {fileID: 1931167099410598695}
-  - {fileID: 1931167099410598695}
-  - {fileID: -6454159676200693056, guid: 5383ce247d66a3f47a76284f25a41fe4, type: 3}
-  - {fileID: -6384470222588187204, guid: b40230bf8ae075947beff15417e4d623, type: 3}
+  - {fileID: -6384470222588187204, guid: 7595ff16c259fa84998a8315545940a4, type: 3}
   leftNeighbours:
-  - {fileID: 1931167099410598695}
-  - {fileID: 1931167099410598695}
-  - {fileID: -6454159676200693056, guid: 5383ce247d66a3f47a76284f25a41fe4, type: 3}
-  - {fileID: -6384470222588187204, guid: fd3bbdbddfaf9304383ab191fc83bb2f, type: 3}
+  - {fileID: -6384470222588187204, guid: 39d698d792e28ed40b32f47746ada408, type: 3}
 --- !u!1 &3957426281145273838
 GameObject:
   m_ObjectHideFlags: 0
@@ -202,8 +192,8 @@ Transform:
   m_GameObject: {fileID: 3957426281145273838}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 0, y: 25, z: -1}
-  m_LocalScale: {x: 10, y: 50, z: 8}
+  m_LocalPosition: {x: -1, y: 25, z: -1}
+  m_LocalScale: {x: 8, y: 50, z: 8}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 9152671164547352165}

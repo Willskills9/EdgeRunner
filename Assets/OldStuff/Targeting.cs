@@ -60,9 +60,11 @@ public class Targeting : MonoBehaviour
         if (dashPrimed)
         {
             Time.timeScale = 0.1f;
+            Time.fixedDeltaTime = Time.timeScale * 0.02f;
         }else
         {
             Time.timeScale = 1f;
+            Time.fixedDeltaTime = Time.timeScale * Time.deltaTime;
         }
 
         if(gravityOff)
