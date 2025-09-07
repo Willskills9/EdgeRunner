@@ -22,6 +22,9 @@ public class Targeting : MonoBehaviour
     bool inputDashing;
     private float dashTimer = 0f;
 
+    public RectTransform uiImage;
+    public Canvas canvas;
+
     void Start()
     {
         Cursor.lockState = CursorLockMode.Locked;
@@ -126,12 +129,15 @@ public class Targeting : MonoBehaviour
     }
 
 
+    [SerializeField] private Vector3 worldOffset = new Vector3(0, 2f, 0); // adjust in Inspector
+
     void SelectClosestObject()
     {
         GameObject[] selectableObjects = GameObject.FindGameObjectsWithTag(selectableTag);
         if (selectableObjects.Length == 0)
         {
             selectedObject = null;
+            uiImage.gameObject.SetActive(false); // hide UI if nothing is selectable
             return;
         }
 
@@ -139,10 +145,15 @@ public class Targeting : MonoBehaviour
         Vector2 screenCenter = new Vector2(Screen.width / 2f, Screen.height / 2f);
         float minDistance = float.MaxValue;
         GameObject closestObject = null;
+        Vector3 closestScreenPos = Vector3.zero;
 
         foreach (GameObject obj in selectableObjects)
         {
-            Vector3 screenPos = cam.WorldToScreenPoint(obj.transform.position);
+            // apply world offset before converting to screen space
+            Vector3 worldPos = obj.transform.position + worldOffset;
+            Vector3 screenPos = cam.WorldToScreenPoint(worldPos);
+
+            // skip if behind camera
             if (screenPos.z < 0) continue;
 
             float distance = Vector2.Distance(screenCenter, screenPos);
@@ -150,20 +161,51 @@ public class Targeting : MonoBehaviour
             {
                 minDistance = distance;
                 closestObject = obj;
+                closestScreenPos = screenPos;
             }
         }
 
+        // update selection
         if (closestObject != selectedObject)
         {
             previousSelectedObject = selectedObject;
             selectedObject = closestObject;
 
-            EnableSelectedCanvas();
-            DisablePreviousCanvas();
-
             Debug.Log("Selected: " + (selectedObject != null ? selectedObject.name : "None"));
         }
+
+        // update UI marker if a valid target is found
+        if (closestObject != null)
+        {
+            uiImage.gameObject.SetActive(true);
+
+            // convert screen position -> local position on canvas
+            RectTransform canvasRect = canvas.transform as RectTransform;
+            Vector2 localPos;
+            RectTransformUtility.ScreenPointToLocalPointInRectangle(
+                canvasRect,
+                closestScreenPos,
+                null, // null because it's Screen Space - Overlay
+                out localPos
+            );
+
+            uiImage.localPosition = localPos;
+        }
+        else
+        {
+            uiImage.gameObject.SetActive(false);
+        }
     }
+
+
+    /*void OnDrawGizmos()
+    {
+        if (selectedObject != null)
+        {
+            Gizmos.color = Color.red;
+            Gizmos.DrawSphere(selectedObject.transform.position, 0.2f);
+        }
+    }*/
 
     private bool isShooting = false;
     private Coroutine shootingCoroutine;
