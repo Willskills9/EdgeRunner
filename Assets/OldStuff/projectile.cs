@@ -4,10 +4,10 @@ using UnityEngine;
 
 public class projectile : MonoBehaviour
 {
-    private Transform target;
-    private float projectileSpeed;
-    private float enemyAimHeight; // new
-    private string ownerTag; // new field for owner
+    public Transform target;
+    public float projectileSpeed;
+    public float enemyAimHeight; // new
+    public string ownerTag; // new field for owner
 
     public Renderer projectileRenderer;
     private int damageAmount;
@@ -48,25 +48,26 @@ public class projectile : MonoBehaviour
         transform.forward = direction;
     }
 
+
     void OnTriggerEnter(Collider other)
     {
+
         // Skip hitting objects with the same tag as owner
         if (other.CompareTag(ownerTag)) return;
 
         if (other.CompareTag("Dash")) return;
 
         // Example: also ignore other projectiles
-        if (!other.CompareTag("Projectile"))
+        if (other.CompareTag("Projectile")) return;
+
+
+        Health targetHealth = other.GetComponent<Health>();
+        if (targetHealth != null)
         {
-            Health targetHealth = other.GetComponent<Health>();
-            if (targetHealth != null)
-            {
-                // Deal damage (for now hardcoded 10, you could add a public damageAmount)
-                targetHealth.TakeDamage(damageAmount, ownerTag);
-            }
-            // Hit something else: destroy self (or apply damage logic etc)
-            Destroy(this.gameObject);
-            Debug.Log($"Projectile hit: {other.gameObject.name}");
+            targetHealth.TakeDamage(damageAmount, ownerTag);
         }
+        // Hit something else: destroy self (or apply damage logic etc)
+        Destroy(gameObject);
+        Debug.Log($"Projectile hit: {other.gameObject.name}");
     }
 }

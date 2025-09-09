@@ -130,6 +130,8 @@ public class Targeting : MonoBehaviour
 
 
     [SerializeField] private Vector3 worldOffset = new Vector3(0, 2f, 0); // adjust in Inspector
+    [SerializeField] private float selectionRadius = 20f;                 // max distance from player
+    [SerializeField] private Transform player;                            // assign in Inspector
 
     void SelectClosestObject()
     {
@@ -137,7 +139,7 @@ public class Targeting : MonoBehaviour
         if (selectableObjects.Length == 0)
         {
             selectedObject = null;
-            uiImage.gameObject.SetActive(false); // hide UI if nothing is selectable
+            uiImage.gameObject.SetActive(false);
             return;
         }
 
@@ -149,6 +151,10 @@ public class Targeting : MonoBehaviour
 
         foreach (GameObject obj in selectableObjects)
         {
+            //  Skip if too far from player
+            if (Vector3.Distance(player.position, obj.transform.position) > selectionRadius)
+                continue;
+
             // apply world offset before converting to screen space
             Vector3 worldPos = obj.transform.position + worldOffset;
             Vector3 screenPos = cam.WorldToScreenPoint(worldPos);
@@ -179,13 +185,12 @@ public class Targeting : MonoBehaviour
         {
             uiImage.gameObject.SetActive(true);
 
-            // convert screen position -> local position on canvas
             RectTransform canvasRect = canvas.transform as RectTransform;
             Vector2 localPos;
             RectTransformUtility.ScreenPointToLocalPointInRectangle(
                 canvasRect,
                 closestScreenPos,
-                null, // null because it's Screen Space - Overlay
+                null,
                 out localPos
             );
 

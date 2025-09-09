@@ -19,7 +19,7 @@ public class ProjectileSpawner : MonoBehaviour
         projectile homing = projectileInstance.GetComponent<projectile>();
         if (homing != null)
         {
-            homing.Initialize(target, projectileSpeed, enemyAimHeight, gameObject.tag, projectileColor, projectileDamage);
+            homing.Initialize(target, projectileSpeed, enemyAimHeight, gameObject.transform.root.tag, projectileColor, projectileDamage);
         }
     }
 }
