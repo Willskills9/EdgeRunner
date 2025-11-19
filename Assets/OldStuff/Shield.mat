@@ -63,7 +63,7 @@ Material:
     - _QueueOffset: 0
     - lineFrequency: 12.18
     - line_brighness: 4.93
-    - power: 1.42
+    - power: 4.16
     - speed: 2.7
     m_Colors:
     - ScanLineTiling: {r: 0, g: 30.16, b: 0, a: 0}

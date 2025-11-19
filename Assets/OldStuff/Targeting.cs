@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using Invector.vCharacterController;
 
 public class Targeting : MonoBehaviour
 {
@@ -21,6 +22,9 @@ public class Targeting : MonoBehaviour
     bool inputShooting;
     bool inputDashing;
     private float dashTimer = 0f;
+    public bool sprintShield = false;
+    public vThirdPersonController controller;
+    public GameObject shieldSphere;
 
     public RectTransform uiImage;
     public Canvas canvas;
@@ -33,6 +37,15 @@ public class Targeting : MonoBehaviour
 
     void Update()
     {
+        if(controller.isSprinting)
+        {
+            sprintShield = true;
+            shieldSphere.SetActive(true);
+        }else
+        {
+            sprintShield = false;
+            shieldSphere.SetActive(false);
+        }
         inputShooting = Input.GetAxis("Fire1") == 1f;
         inputDashing = Input.GetAxis("Fire2") == 1f;
         SelectClosestObject();

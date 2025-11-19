@@ -8,6 +8,7 @@ TagManager:
   - Projectile
   - Enemy
   - Terrain
+  - SpotLight
   layers:
   - Default
   - TransparentFX
