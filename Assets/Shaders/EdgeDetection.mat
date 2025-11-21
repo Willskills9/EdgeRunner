@@ -41,9 +41,9 @@ Material:
         m_Offset: {x: 0, y: 0}
     m_Ints: []
     m_Floats:
-    - _Depth_line: 0.75
-    - _Depth_line_Bias: 0.8
-    - _Thickness: 1.6
+    - _Depth_line: 1.2
+    - _Depth_line_Bias: 1.19
+    - _Thickness: 0.35
     m_Colors:
     - _Color: {r: 0, g: 2, b: 2, a: 0}
   m_BuildTextureStacks: []
