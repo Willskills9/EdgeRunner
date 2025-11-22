@@ -23,7 +23,7 @@ public class Targeting : MonoBehaviour
     bool inputDashing;
     private float dashTimer = 0f;
     public bool sprintShield = false;
-    public vThirdPersonController controller;
+    //public vThirdPersonController controller;
     public GameObject shieldSphere;
 
     public RectTransform uiImage;
@@ -37,7 +37,7 @@ public class Targeting : MonoBehaviour
 
     void Update()
     {
-        if(controller.isSprinting)
+        /*if(controller.isSprinting)
         {
             sprintShield = true;
             shieldSphere.SetActive(true);
@@ -46,6 +46,7 @@ public class Targeting : MonoBehaviour
             sprintShield = false;
             shieldSphere.SetActive(false);
         }
+        */
         inputShooting = Input.GetAxis("Fire1") == 1f;
         inputDashing = Input.GetAxis("Fire2") == 1f;
         SelectClosestObject();
