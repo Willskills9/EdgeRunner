@@ -24,6 +24,8 @@ public class PlayerLocomotion : MonoBehaviour
     public float movementSpeed = 5;
     public float rotationSpeed = 15;
     public Vector3 movementVelocity;
+    public float accelerationTimer = 0f;
+    public float accelerationTime = 1f;
 
     [Header("Jump Speeds")]
     public float maxJumpHeight = 3f;
@@ -56,14 +58,28 @@ public class PlayerLocomotion : MonoBehaviour
 
     private void HandleMovement()
     {
+        float inputMagnitude = new Vector2(inputManager.horizontalInput, inputManager.verticalInput).magnitude;
+        if (inputMagnitude > 0.1f)
+        {
+            accelerationTimer += Time.deltaTime;
+            accelerationTimer = Mathf.Clamp(accelerationTimer, 0f, accelerationTime);
+        }
+        else
+        {
+            accelerationTimer = 0.5f;
+        }
+
+        float accelFactor = accelerationTimer / accelerationTime;
+
         moveDirection = cameraObject.forward * inputManager.verticalInput;
         moveDirection = moveDirection + cameraObject.right * inputManager.horizontalInput;
         moveDirection.Normalize();
         moveDirection.y = 0;
 
-        moveDirection = moveDirection * movementSpeed;
+        //moveDirection = moveDirection * movementSpeed;
 
-        movementVelocity = moveDirection;
+        //movementVelocity = moveDirection;
+        movementVelocity = moveDirection * (movementSpeed * accelFactor);
         movementVelocity.y = playerRigidbody.velocity.y;
         playerRigidbody.velocity = movementVelocity;
     }
@@ -136,7 +152,7 @@ public class PlayerLocomotion : MonoBehaviour
         if(isGrounded && !isJumping && isJumpPressed)
         {
             isJumping = true;
-            Debug.Log("Jump");
+            accelerationTimer = accelerationTime; //max move speed after jumping
             movementVelocity.y = initialJumpVelocity;
             playerRigidbody.linearVelocity = movementVelocity;
             /*float jumpingVelocity = Mathf.Sqrt(-2 * gravityIntensity * maxJumpHeight);

@@ -20,12 +20,12 @@ public class Health : MonoBehaviour
     [Tooltip("List of owner tags that can damage this object")]
     public List<string> damageableByTags = new List<string> { "Player", "Enemy" };
 
-    private vThirdPersonController controller;
+    private Targeting targeting;
 
     void Start()
     {
         currentHealth = maxHealth;
-        controller = GetComponent<vThirdPersonController>();
+        targeting = GetComponentInChildren<Targeting>();
         if (uiSlider != null)
         {
             uiSlider.maxValue = maxValue;
@@ -82,7 +82,7 @@ public class Health : MonoBehaviour
             return;
         }
 
-        if (controller != null && controller.isSprinting)
+        if (targeting != null && targeting.sprintShield)
         {
             //blocked damage while sprinting.
             return;
@@ -113,7 +113,7 @@ public class Health : MonoBehaviour
         }
     }
 
-    private void Die()
+    public void Die()
     {
         Debug.Log($"{gameObject.name} died.");
         Destroy(gameObject); // Or trigger animation, disable AI etc.

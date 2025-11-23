@@ -9,6 +9,7 @@ public class Targeting : MonoBehaviour
     public GameObject selectedObject;
     private GameObject previousSelectedObject;
     public ProjectileSpawner projectileSpawner;
+    public PlayerLocomotion playerLocomotion;
     public float rateOfFire;
     public float dashSpeed = 1000f;
     public float dashDuration = 0.2f;
@@ -36,7 +37,7 @@ public class Targeting : MonoBehaviour
 
     void Update()
     {
-        /*if(controller.isSprinting)
+        if(playerLocomotion.accelerationTimer >= playerLocomotion.accelerationTime / 2f)
         {
             sprintShield = true;
             shieldSphere.SetActive(true);
@@ -45,7 +46,7 @@ public class Targeting : MonoBehaviour
             sprintShield = false;
             shieldSphere.SetActive(false);
         }
-        */
+        
         inputShooting = Input.GetAxis("Fire1") == 1f;
         inputDashing = Input.GetAxis("Fire2") == 1f;
         SelectClosestObject();
@@ -127,7 +128,11 @@ public class Targeting : MonoBehaviour
 
             yield return null;
         }
-
+        if(selectedObject.GetComponent<Health>() != null)
+        {
+            selectedObject.GetComponent<Health>().Die();
+        }
+        playerLocomotion.accelerationTimer = 0.5f;
         //rb.MovePosition(targetPosition);
         isDashing = false;
     }
