@@ -17,7 +17,7 @@ public class InputManager : MonoBehaviour
     public float verticalInput;
     public float horizontalInput;
 
-    public bool jump_Input;
+    public bool jump_Input = false;
 
     private void OnEnable()
     {
@@ -32,8 +32,10 @@ public class InputManager : MonoBehaviour
             playerControls.Player.Look.performed += 
                 i => cameraInput = i.ReadValue<Vector2>();
             
-            playerControls.Player.Jump.performed += 
-                i => jump_Input = true;
+            //playerControls.Player.Jump.performed += i => jump_Input = true;
+
+            playerControls.Player.Jump.started += onJump;
+            playerControls.Player.Jump.canceled += onJump;
 
         }
 
@@ -48,7 +50,7 @@ public class InputManager : MonoBehaviour
     public void HandleAllInputs()
     {
         HandleMovementInput();
-        HandleJumpingInput();
+        //HandleJumpingInput();
     }
 
     private void HandleMovementInput()
@@ -62,13 +64,17 @@ public class InputManager : MonoBehaviour
 
     }
 
-    private void HandleJumpingInput()
+    /*private void HandleJumpingInput()
     {
-        if(jump_Input)
-        {
-            jump_Input = false;
-            playerLocomotion.HandleJumping();
-        }
+        playerLocomotion.HandleJumping(true);
+        
+    }*/
+
+    void onJump (InputAction.CallbackContext context)
+    {
+        jump_Input = context.ReadValueAsButton();
+        Debug.Log(jump_Input);
+        playerLocomotion.HandleJumping(jump_Input);
     }
 }
 

@@ -18,7 +18,7 @@ public class PlayerLocomotion : MonoBehaviour
 
     [Header("Movement Flags")]
     public bool isGrounded;
-    public bool isJumping;
+    public bool isJumping = false;
 
     [Header("Movement Speeds")]
     public float movementSpeed = 5;
@@ -26,14 +26,25 @@ public class PlayerLocomotion : MonoBehaviour
     public Vector3 movementVelocity;
 
     [Header("Jump Speeds")]
-    public float jumpHeight = 3;
-    public float gravityIntensity = -15;
+    public float maxJumpHeight = 3f;
+    float initialJumpVelocity = 50f;
+    public float maxJumpTime = 0.5f;
+    public float fallMultiplier = 2f;
+    //public float gravityIntensity = -9.8f;
 
     private void Awake()
     {
         inputManager = GetComponent<InputManager>();
         playerRigidbody = GetComponent<Rigidbody>();
         cameraObject = Camera.main.transform;
+        calculateJumpVariables();
+    }
+
+    void calculateJumpVariables()
+    {
+        float timeToApex = maxJumpTime / 2f;
+        //gravityIntensity = (-2 * maxJumpHeight) / Mathf.Pow(timeToApex, 2);
+        initialJumpVelocity = (2 * maxJumpHeight) / timeToApex;
     }
 
     public void HandleAllMovement()
@@ -49,10 +60,12 @@ public class PlayerLocomotion : MonoBehaviour
         moveDirection = moveDirection + cameraObject.right * inputManager.horizontalInput;
         moveDirection.Normalize();
         moveDirection.y = 0;
+
         moveDirection = moveDirection * movementSpeed;
 
         movementVelocity = moveDirection;
-        playerRigidbody.linearVelocity = movementVelocity;
+        movementVelocity.y = playerRigidbody.velocity.y;
+        playerRigidbody.velocity = movementVelocity;
     }
 
     private void HandleRotation()
@@ -80,20 +93,36 @@ public class PlayerLocomotion : MonoBehaviour
         RaycastHit hit;
         Vector3 rayCastOrigin = transform.position;
         rayCastOrigin.y = rayCastOrigin.y + rayCastHeightOffSet;
-        if (!isGrounded && !isJumping)
+        if(playerRigidbody.velocity.y < 0f)
         {
-            
-            inAirTimer = inAirTimer + Time.deltaTime;
-            playerRigidbody.AddForce(transform.forward * leapingVelocity);
-            playerRigidbody.AddForce(-Vector3.up * fallingVelocity * inAirTimer);
+            isJumping = false;
         }
 
-        if (Physics.SphereCast(rayCastOrigin, 0.1f, -Vector3.up, out hit, groundLayer))
+        if (!isGrounded)
+        {
+            float newFallingVelocity;
+            if(!isJumping)
+            {
+                newFallingVelocity = fallingVelocity * fallMultiplier;
+            }else
+            {
+                newFallingVelocity = fallingVelocity;
+            }
+            inAirTimer = inAirTimer + Time.deltaTime;
+            playerRigidbody.AddForce(transform.forward * leapingVelocity);
+            playerRigidbody.AddForce(Vector3.down * newFallingVelocity * inAirTimer);
+        }
+
+        if (Physics.SphereCast(rayCastOrigin, 0.1f, Vector3.down, out hit, groundLayer))
         {
             if(!isGrounded)
             {
                 inAirTimer = 0;
                 isGrounded = true;
+                if(isJumping)
+                {
+                    isJumping = false;
+                }
             }
         }else
         {
@@ -102,18 +131,25 @@ public class PlayerLocomotion : MonoBehaviour
 
     }
 
-    public void HandleJumping()
+    public void HandleJumping(bool isJumpPressed)
     {
-        if(isGrounded)
+        if(isGrounded && !isJumping && isJumpPressed)
         {
+            isJumping = true;
             Debug.Log("Jump");
-            playerRigidbody.AddForce(Vector3.up * jumpHeight, ForceMode.Impulse);
-            /*float jumpingVelocity = Mathf.Sqrt(-2 * gravityIntensity * jumpHeight);
+            movementVelocity.y = initialJumpVelocity;
+            playerRigidbody.linearVelocity = movementVelocity;
+            /*float jumpingVelocity = Mathf.Sqrt(-2 * gravityIntensity * maxJumpHeight);
             Vector3 playerVelocity = moveDirection;
             playerVelocity.y = jumpingVelocity;
             playerRigidbody.linearVelocity = playerVelocity;*/
             
             
+        }if(!isJumpPressed && isJumping)
+        {
+            isJumping = false;
         }
+
+        
     }
 }

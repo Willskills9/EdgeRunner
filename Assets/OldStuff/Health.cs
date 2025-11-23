@@ -61,7 +61,7 @@ public class Health : MonoBehaviour
             {
                 //Die
             }
-        }else
+        }else if (SpotLightMeter >= 0f)
         {
             SpotLightMeter -= (SpotLightBuildUpPerTick/2f);
         }

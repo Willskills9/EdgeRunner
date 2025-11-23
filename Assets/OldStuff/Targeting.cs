@@ -18,7 +18,6 @@ public class Targeting : MonoBehaviour
     private bool canDash = true;
     private bool isDashing = false;
     public bool dashPrimed = false;
-    public bool gravityOff = false;
     bool inputShooting;
     bool inputDashing;
     private float dashTimer = 0f;
@@ -84,13 +83,6 @@ public class Targeting : MonoBehaviour
             Time.fixedDeltaTime = Time.timeScale * Time.deltaTime;
         }
 
-        if(gravityOff)
-        {
-            rb.useGravity = false;
-        }else
-        {
-            rb.useGravity = true;
-        }
 
         // Cooldown timer update
         if (!canDash)
@@ -98,7 +90,6 @@ public class Targeting : MonoBehaviour
             dashTimer -= Time.deltaTime;
             if (dashTimer <= 0f)
             {
-                gravityOff = false;
                 canDash = true;
             }
         }
@@ -138,7 +129,6 @@ public class Targeting : MonoBehaviour
         }
 
         //rb.MovePosition(targetPosition);
-        gravityOff = true;
         isDashing = false;
     }
 
